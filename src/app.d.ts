@@ -8,6 +8,10 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	interface Window {
+		CESIUM_BASE_URL: string;
+	}
 }
 
-export {};
+export { };
