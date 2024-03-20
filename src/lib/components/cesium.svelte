@@ -1,8 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	export let data: PageData;
-	const { cesiumKey } = data;
-
 	import { onMount } from 'svelte';
 
 	import {
@@ -12,20 +8,13 @@
 		createGooglePhotorealistic3DTileset,
 		HeadingPitchRange
 	} from 'cesium';
-	import 'cesium/Build/Cesium/Widgets/widgets.css';
-	import Cesium from '$lib/components/cesium.svelte';
 
-	let renderCesium = false;
-	let imageUrl = '';
-	let longitude = 12.0096;
-	let latitude = 57.6937;
+	export let longitude = 12.0096;
+	export let latitude = 57.6937;
 
-	const renderImage = (viewer: Viewer) => {
-		viewer.render();
-		imageUrl = viewer.canvas.toDataURL();
-	};
+	export let cesiumKey: string;
 
-	const startCesium = async () => {
+	onMount(async () => {
 		window.CESIUM_BASE_URL = '/';
 		Ion.defaultAccessToken = cesiumKey;
 
@@ -60,38 +49,9 @@
 		});
 
 		setTimeout(() => {
-			renderImage(viewer);
+			// renderImage(viewer);
 		}, 5000);
-	};
+	});
 </script>
 
-<div class="flex flex-col h-screen justify-center items-center">
-	{#if renderCesium}
-		<div class="w-1/2">
-			<button
-				class="bg-red-800 py-3 px-8 rounded-md mt-4"
-				on:click={() => (renderCesium = !renderCesium)}>Stop</button
-			>
-			<!-- <div id="cesiumContainer" class="w-1/2"></div> -->
-			<Cesium {longitude} {latitude} {cesiumKey} />
-
-			{#if imageUrl}
-				<img src={imageUrl} alt="cesium" class="w-72" />
-			{/if}
-		</div>
-	{:else}
-		<div class="flex flex-col">
-			<p>Longitude</p>
-			<input type="number" class="m-1" bind:value={longitude} />
-			<p>Latitude</p>
-			<input type="number" class="m-1" bind:value={latitude} />
-		</div>
-
-		<button
-			class="bg-lime-500 py-3 px-8 rounded-md mt-4"
-			on:click={() => {
-				renderCesium = !renderCesium;
-			}}>Start</button
-		>
-	{/if}
-</div>
+<div id="cesiumContainer"></div>
