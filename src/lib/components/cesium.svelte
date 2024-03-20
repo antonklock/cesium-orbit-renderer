@@ -1,6 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	let imageUrls: string[] = [];
+
+	const renderImage = (viewer: Viewer) => {
+		if (imageUrls.length < 10) {
+			viewer.render();
+			imageUrls = [...imageUrls, viewer.canvas.toDataURL()];
+			console.log(imageUrls);
+		}
+	};
+
 	import {
 		Ion,
 		Cartesian3,
@@ -46,12 +56,27 @@
 		viewer.clock.onTick.addEventListener(() => {
 			heading += (rotation * Math.PI) / SMOOTHNESS;
 			viewer.camera.lookAt(centre, new HeadingPitchRange(heading, pitch, elevation));
-		});
-
-		setTimeout(() => {
 			// renderImage(viewer);
-		}, 5000);
+		});
+		setTimeout(() => {
+			setInterval(() => {
+				// heading += (rotation * Math.PI) / SMOOTHNESS;
+				// viewer.camera.lookAt(centre, new HeadingPitchRange(heading, pitch, elevation));
+				renderImage(viewer);
+			}, 100);
+		}, 3000);
 	});
 </script>
 
 <div id="cesiumContainer"></div>
+
+{#if imageUrls.length > 0}
+	<div class="container mx-auto">
+		<div class="grid grid-cols-10 gap-4">
+			{#each imageUrls as image}
+				<!-- <p>{image}</p> -->
+				<img src={image} alt="cesium" class="m-1 w-24" />
+			{/each}
+		</div>
+	</div>
+{/if}

@@ -16,53 +16,8 @@
 	import Cesium from '$lib/components/cesium.svelte';
 
 	let renderCesium = false;
-	let imageUrl = '';
 	let longitude = 12.0096;
 	let latitude = 57.6937;
-
-	const renderImage = (viewer: Viewer) => {
-		viewer.render();
-		imageUrl = viewer.canvas.toDataURL();
-	};
-
-	const startCesium = async () => {
-		window.CESIUM_BASE_URL = '/';
-		Ion.defaultAccessToken = cesiumKey;
-
-		// Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
-		const viewer = new Viewer('cesiumContainer', {
-			// terrain: Terrain.fromWorldTerrain()
-			globe: false
-		});
-
-		try {
-			const tileset = await createGooglePhotorealistic3DTileset();
-			viewer.scene.primitives.add(tileset);
-		} catch (error) {
-			console.log(`Failed to load tileset: ${error}`);
-		}
-
-		// setInterval(() => {
-		// 	viewer.camera.rotate(Cartesian3.fromDegrees(0, 90, 0), -0.1);
-		// }, 100);
-
-		let heading = 0; //or any starting angle in radians
-		let rotation = -1; //counter-clockwise; +1 would be clockwise
-		let centre = Cartesian3.fromDegrees(longitude, latitude, 100);
-		let elevation = 100; // 100 meters
-		let pitch = -0.7854; //looking down at 45 degrees
-
-		const SMOOTHNESS = 600; //it would make one full circle in roughly 600 frames
-
-		viewer.clock.onTick.addEventListener(() => {
-			heading += (rotation * Math.PI) / SMOOTHNESS;
-			viewer.camera.lookAt(centre, new HeadingPitchRange(heading, pitch, elevation));
-		});
-
-		setTimeout(() => {
-			renderImage(viewer);
-		}, 5000);
-	};
 </script>
 
 <div class="flex flex-col h-screen justify-center items-center">
@@ -74,10 +29,6 @@
 			>
 			<!-- <div id="cesiumContainer" class="w-1/2"></div> -->
 			<Cesium {longitude} {latitude} {cesiumKey} />
-
-			{#if imageUrl}
-				<img src={imageUrl} alt="cesium" class="w-72" />
-			{/if}
 		</div>
 	{:else}
 		<div class="flex flex-col">
