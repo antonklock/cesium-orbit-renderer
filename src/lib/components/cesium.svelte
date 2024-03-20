@@ -41,10 +41,6 @@
 			console.log(`Failed to load tileset: ${error}`);
 		}
 
-		// setInterval(() => {
-		// 	viewer.camera.rotate(Cartesian3.fromDegrees(0, 90, 0), -0.1);
-		// }, 100);
-
 		let heading = 0; //or any starting angle in radians
 		let rotation = -1; //counter-clockwise; +1 would be clockwise
 		let centre = Cartesian3.fromDegrees(longitude, latitude, 100);
