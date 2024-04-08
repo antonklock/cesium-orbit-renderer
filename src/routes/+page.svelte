@@ -22,7 +22,7 @@
 
 <div class="flex flex-col h-screen justify-center items-center">
 	{#if renderCesium}
-		<div class="w-1/2">
+		<div class="w-full">
 			<button
 				class="bg-red-800 py-3 px-8 rounded-md mt-4"
 				on:click={() => (renderCesium = !renderCesium)}>Stop</button
